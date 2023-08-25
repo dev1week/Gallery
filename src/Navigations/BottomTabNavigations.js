@@ -20,7 +20,7 @@ export const BottomTabNavigations = ()=>{
                 }
                 const iconName = getIconName() 
                 return(
-                    <TabIcon iconName={iconName}/>
+                    <TabIcon iconName={iconName} iconColor={focused?color:'gray'}/>
                 )
             }
         })
