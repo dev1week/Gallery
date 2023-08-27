@@ -1,13 +1,14 @@
 import React from "react";
-import { useSafeAreaInset } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { View, useWindowDimensions } from "react-native";
 import { HeaderTitle } from "./HeaderTitle";
 import { HeaderIcon } from "./HeaderButton";
 import { HeaderGroup } from "./HeaderGroup";
+import { Spacer } from "../Spacer";
 
 export const Header = (props) => {
   //아이폰 노치 영역 회피를 위해 safeArea 선언
-  const insets = useSafeAreaInset();
+  const insets = useSafeAreaInsets();
   const width = useWindowDimensions();
 
   return (
@@ -22,7 +23,7 @@ export const Header = (props) => {
           alignsItems: "center",
         }}
       >
-        <Spacer horizontal={true} space={12}></Spacer>
+        <Spacer horizontal={true} space={12} />
         <View
           style={{
             flex: 1,
@@ -32,7 +33,7 @@ export const Header = (props) => {
         >
           {props.children}
         </View>
-        <View> </View>
+
         <Spacer></Spacer>
       </View>
     </View>
