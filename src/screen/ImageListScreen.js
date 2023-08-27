@@ -14,16 +14,12 @@ export const ImageListScreen = (props) => {
         </Header.Group>
       </Header>
       <FlatList
-        style={{ flext: 1 }}
+        style={{ flex: 1 }}
         data={IMAGE_LIST}
         renderItem={({ item }) => {
           return <PhotoListItem url={item} />;
         }}
       />
-
-      <View
-        style={{ flext: 1, alignItems: "center", justifyContent: "center" }}
-      ></View>
     </View>
   );
 };
