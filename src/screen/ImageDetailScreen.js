@@ -6,7 +6,8 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { RemoteImage } from "../components/RemoteImage";
 import { Button } from "../components/Button";
 import { Icon } from "../components/Icon";
-
+import * as FileSystem from "expo-file-system";
+import * as MediaLibrary from "expo-media-library";
 export const ImageDetailScreen = (props) => {
   const navigation = useNavigation();
   const route = useRoute();
@@ -17,7 +18,44 @@ export const ImageDetailScreen = (props) => {
     navigation.goBack();
   }, []);
 
-  const onPressDownload = useCallback(() => {}, []);
+  const onPressDownload = useCallback(async () => {
+    const downloadResumable = FileSystem.createDownloadResumable(
+      route.params.url,
+      `${FileSystem.documentDirectory}${new Date().getMilliseconds()}.jpg`,
+      {},
+    );
+
+    try {
+      const { uri } = await downloadResumable.downloadAsync();
+      console.log(uri);
+      const permissionResult = await MediaLibrary.getPermissionsAsync(true);
+      console.log(permissionResult);
+      //권한 허용 거절된 경우
+      if (permissionResult.status == "denied") {
+        return;
+      }
+
+      //허락 안하는 경우
+      if (permissionResult.status == "undetermined") {
+        //다시 묻는다.
+        const requestResult = await MediaLibrary.requestPermissionsAsync();
+        if (requestResult.status == "denied") {
+          return;
+        }
+      }
+
+      const asset = await MediaLibrary.createAlbumAsync(uri);
+      const album = await MediaLibrary.createAlbumAsync(
+        "MyFirstAlbum",
+        asset,
+        false,
+      );
+      console.log(asset);
+      console.log(album);
+    } catch (ex) {
+      console.log(ex);
+    }
+  }, []);
 
   return (
     <View style={{ flex: 1 }}>
