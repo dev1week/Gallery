@@ -1,5 +1,5 @@
-import React, { useCallback } from "react";
-import { useWindowDimensions } from "react-native";
+import React, { useCallback, useState } from "react";
+import { Animated, useWindowDimensions } from "react-native";
 import { Button } from "./Button";
 import { RemoteImage } from "./RemoteImage";
 import { Spacer } from "./Spacer";
@@ -14,10 +14,43 @@ export const PhotoListItem = (props) => {
     navigation.navigate("ImageDetail", { url: props.url });
   }, []);
 
+  //클릭시 확대 축소 애니메이션 구현 부
+  const [animationValue] = useState(new Animated.Value(0));
+
+  const onPressIn = useCallback(() => {
+    console.log("onPressIN");
+    Animated.timing(animValue, {
+      duration: 200,
+      toValue: 1,
+    }).start();
+  }, []);
+
+  const onPressOut = useCallback(() => {
+    console.log("onPressOut");
+    Animated.timing(animValue, {
+      duration: 200,
+      toValue: 0,
+    }).start();
+  }, []);
+
+  const scale = animationValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [1.0, 0.95],
+  });
+
   return (
-    <Button onPress={onPressItem} paddingHorizontal={20} paddingVertical={10}>
+    <Button
+      onPress={onPressItem}
+      onPressIn={onPressIn}
+      onPressOut={onPressOut}
+      paddingHorizontal={20}
+      paddingVertical={10}
+    >
       <Spacer horizontal={false} space={30}></Spacer>
-      <RemoteImage url={props.url} width={width - 40} height={width * 1.2} />
+      <Animated.View style={{ transform: [{ scale: scale }] }}>
+        <RemoteImage url={props.url} width={width - 40} height={width * 1.2} />
+      </Animated.View>
+
       <Spacer></Spacer>
     </Button>
   );
