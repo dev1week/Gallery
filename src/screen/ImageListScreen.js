@@ -1,11 +1,25 @@
 import React from "react";
-import { View } from "react-native";
+import { FlatList, View } from "react-native";
 import { Typography } from "../components/Typography";
+import { Header } from "../components/Header/Header";
+import { IMAGE_LIST } from "../constants";
+import { PhotoListItem } from "../components/PhotoListItem";
 
 export const ImageListScreen = (props) => {
   return (
-    <View style={{ flext: 1, alignItems: "center", justifyContent: "center" }}>
-      <Typography fontSize={20}>ImageList</Typography>
+    <View style={{ flex: 1 }}>
+      <Header>
+        <Header.Group>
+          <Header.Title title="Image List"></Header.Title>
+        </Header.Group>
+      </Header>
+      <FlatList
+        style={{ flex: 1 }}
+        data={IMAGE_LIST}
+        renderItem={({ item }) => {
+          return <PhotoListItem url={item} />;
+        }}
+      />
     </View>
   );
 };
